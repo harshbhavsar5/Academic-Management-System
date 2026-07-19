@@ -1,0 +1,22 @@
+# Compiled files
+build/
+*.o
+*.out
+*.exe
+
+# VS Code settings
+.vscode/
+
+# macOS files
+.DS_Store
+
+# Temporary files
+*.tmp
+*.log
+
+# Environment and credentials
+.env
+
+# Personal notes and documentation
+*.pages
+*.docx
