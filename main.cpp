@@ -7,6 +7,7 @@
 #include "include/Course.h"
 #include "include/SemesterOffering.h"
 #include "include/Enrollment.h"
+#include "include/Marks.h"
 using namespace std;
 
 int main()
@@ -59,6 +60,9 @@ int main()
 
     Enrollment enrollment1(1,1,1,"2026-08-1","Enrolled");
     enrollment1.displayEnrollment();
+
+    Marks marks1(1,1,25.5,60.0,"A+");
+    marks1.displayMarks();
     
     return 0;
 }

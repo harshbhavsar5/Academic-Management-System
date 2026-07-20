@@ -13,17 +13,7 @@ Faculty::Faculty() : User()
 }
 
 // Parameterized constructor
-Faculty::Faculty(
-    int userId,
-    string name,
-    string email,
-    string password,
-    int facultyId,
-    string employeeCode,
-    int departmentId,
-    string designation
-) : User(userId, name, email, password)
-{
+Faculty::Faculty(int userId,string name,string email,string password,int facultyId,string employeeCode,int departmentId,string designation) : User(userId, name, email, password){
     this->facultyId = facultyId;
     this->employeeCode = employeeCode;
     this->departmentId = departmentId;
@@ -31,49 +21,40 @@ Faculty::Faculty(
 }
 
 // Setters
-void Faculty::setFacultyId(int facultyId)
-{
+void Faculty::setFacultyId(int facultyId){
     this->facultyId = facultyId;
 }
 
-void Faculty::setEmployeeCode(string employeeCode)
-{
+void Faculty::setEmployeeCode(string employeeCode){
     this->employeeCode = employeeCode;
 }
 
-void Faculty::setDepartmentId(int departmentId)
-{
+void Faculty::setDepartmentId(int departmentId){
     this->departmentId = departmentId;
 }
 
-void Faculty::setDesignation(string designation)
-{
+void Faculty::setDesignation(string designation){
     this->designation = designation;
 }
 
 // Getters
-int Faculty::getFacultyId()
-{
+int Faculty::getFacultyId(){
     return facultyId;
 }
 
-string Faculty::getEmployeeCode()
-{
+string Faculty::getEmployeeCode(){
     return employeeCode;
 }
 
-int Faculty::getDepartmentId()
-{
+int Faculty::getDepartmentId(){
     return departmentId;
 }
 
-string Faculty::getDesignation()
-{
+string Faculty::getDesignation(){
     return designation;
 }
 
-void Faculty::displayDashboard()
-{
+void Faculty::displayDashboard(){
     cout << "\n===== FACULTY DASHBOARD =====" << endl;
 
     cout << "Name: " << getName() << endl;
@@ -90,6 +71,5 @@ void Faculty::displayDashboard()
     cout << "6. Logout" << endl;
 }
 
-Faculty::~Faculty()
-{
+Faculty::~Faculty(){
 }
