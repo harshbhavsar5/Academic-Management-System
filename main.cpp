@@ -4,6 +4,9 @@
 #include "include/Faculty.h"
 #include "include/Admin.h"
 #include "include/Department.h"
+#include "include/Course.h"
+#include "include/SemesterOffering.h"
+#include "include/Enrollment.h"
 using namespace std;
 
 int main()
@@ -47,6 +50,15 @@ int main()
 
     Department department1(1,"Mathematics and Computing","Dr. Kalpesh Haria");
     department1.displayDepartment();
+
+    Course course1(1,"MA205","Abstract Algebra",4,1,4);
+    course1.displayCourse();
+
+    SemesterOffering summerOffering1(1,1,201,4,"2025-2026",40);
+    summerOffering1.displayOffering();
+
+    Enrollment enrollment1(1,1,1,"2026-08-1","Enrolled");
+    enrollment1.displayEnrollment();
     
     return 0;
 }
