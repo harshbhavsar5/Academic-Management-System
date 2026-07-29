@@ -1,10 +1,13 @@
 #include <iostream>
+#include <limits>
 
 #include "Menu.h"
 #include "Admin.h"
 #include "Faculty.h"
 #include "Student.h"
 #include "DatabaseConnection.h"
+#include "StudentManager.h"
+#include "FacultyManager.h"
 
 using namespace std;
 
@@ -37,7 +40,7 @@ void Menu::showMainMenu(){
 
         if (choice == 1){
             cout << "\nAdmin selected." << endl;
-            admin.displayDashboard();
+            showAdminMenu(database.getSession());
         }
         else if (choice == 2){
             cout << "\nFaculty selected." << endl;
@@ -55,3 +58,52 @@ void Menu::showMainMenu(){
         }
     }
 }
+
+void Menu::showAdminMenu(mysqlx::Session* session){
+    int choice = 0;
+    while (choice != 8){
+        cout << "\n========== ADMIN MENU ==========" << endl;
+        cout << "1. Manage Students" << endl;
+        cout << "2. Manage Faculty" << endl;
+        cout << "3. Manage Departments" << endl;
+        cout << "4. Manage Courses" << endl;
+        cout << "5. Manage Semester Offerings" << endl;
+        cout << "6. Manage Enrollments" << endl;
+        cout << "7. Manage Marks" << endl;
+        cout << "8. Back to Main Menu" << endl;
+
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if (choice == 1){
+            StudentManager studentManager(session);
+            studentManager.showStudentManagementMenu();
+        }
+        else if (choice == 2){
+                FacultyManager facultyManager(session);
+                facultyManager.showFacultyManagementMenu();
+        }
+        else if (choice == 3){
+            cout << "\nDepartment management is not implemented yet." << endl;
+        }
+        else if (choice == 4){
+            cout << "\nCourse management is not implemented yet." << endl;
+        }
+        else if (choice == 5){
+            cout << "\nSemester offering management is not implemented yet." << endl;
+        }
+        else if (choice == 6){
+            cout << "\nEnrollment management is not implemented yet." << endl;
+        }
+        else if (choice == 7){
+            cout << "\nMarks management is not implemented yet." << endl;
+        }
+        else if (choice == 8){
+            cout << "\nReturning to main menu..." << endl;
+        }
+        else{
+            cout << "\nInvalid choice. Enter a number from 1 to 8." << endl;
+        }
+    }
+}
+

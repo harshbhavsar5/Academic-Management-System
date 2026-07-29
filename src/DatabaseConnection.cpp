@@ -13,7 +13,7 @@ bool DatabaseConnection::connect(){
             "localhost",
             33060,  
             "root",
-            "Password"
+            "Harsh@1234"
         );
 
         session->sql("USE academic_management").execute();
