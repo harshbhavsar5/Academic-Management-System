@@ -13,7 +13,8 @@ bool DatabaseConnection::connect(){
             "localhost",
             33060,  
             "root",
-            "Harsh@1234"
+            // Replace YOUR_MYSQL_PASSWORD with your local MySQL password.
+            "Password"
         );
 
         session->sql("USE academic_management").execute();
