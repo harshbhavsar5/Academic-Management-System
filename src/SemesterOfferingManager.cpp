@@ -41,44 +41,63 @@ void SemesterOfferingManager::showSemesterOfferingMenu(){
     }
 }
 
-void SemesterOfferingManager::addOffering(){
-    int courseId, semesterNumber;
-    string academicYear;
+void SemesterOfferingManager::addOffering()
+{
+    string courseCode;
 
     cout << "\n===== ADD SEMESTER OFFERING =====" << endl;
-    cout << "Enter course ID: ";
-    cin >> courseId;
-    cout << "Enter semester number (1-8): ";
-    cin >> semesterNumber;
-    cout << "Enter academic year (example 2026-2027): ";
-    cin >> academicYear;
+    cout << "Enter course code: ";
+    cin >> courseCode;
 
-    if (semesterNumber < 1 || semesterNumber > 8){
-        cout << "\nSemester number must be between 1 and 8." << endl;
-        return;
-    }
-
-    try{
+    try
+    {
         mysqlx::Row courseRow = session->sql(
-            "SELECT course_id FROM courses WHERE course_id = ?"
-        ).bind(courseId).execute().fetchOne();
+            "SELECT course_id, course_name "
+            "FROM courses "
+            "WHERE course_code = ?"
+        ).bind(courseCode).execute().fetchOne();
 
         if (!courseRow)
         {
-            cout << "\nNo course found with ID: " << courseId << endl;
+            cout << "\nNo course found with code: "
+                 << courseCode << endl;
             return;
         }
 
-        mysqlx::SqlResult result = session->sql(
-            "INSERT INTO semester_offerings "
-            "(course_id, semester_number, academic_year) VALUES (?, ?, ?)"
-        ).bind(courseId, semesterNumber, academicYear).execute();
+        int courseId = courseRow[0].get<int>();
 
-        cout << "\nOffering added successfully." << endl;
-        cout << "Generated Offering ID: " << result.getAutoIncrementValue() << endl;
+        cout << "Course Found: "
+             << courseRow[1].get<string>() << endl;
+
+        int semesterNumber;
+        string academicYear;
+
+        cout << "Enter semester number (1-8): ";
+        cin >> semesterNumber;
+
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+            cout << "\nInvalid semester number." << endl;
+            return;
+        }
+
+        if (semesterNumber < 1 || semesterNumber > 8)
+        {
+            cout << "\nSemester number must be between 1 and 8."
+                 << endl;
+            return;
+        }
+
+        cout << "Enter academic year (example 2026-2027): ";
+        cin >> academicYear;
     }
-    catch (const mysqlx::Error& error){
-        cout << "\nUnable to add offering.\nError: " << error.what() << endl;
+    catch (const mysqlx::Error& error)
+    {
+        cout << "\nUnable to add semester offering." << endl;
+        cout << "Error: " << error.what() << endl;
     }
 }
 

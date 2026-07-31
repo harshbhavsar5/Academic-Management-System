@@ -8,6 +8,10 @@
 #include "DatabaseConnection.h"
 #include "StudentManager.h"
 #include "FacultyManager.h"
+#include "CourseManager.h"
+#include "SemesterOfferingManager.h"
+#include "EnrollmentManager.h"
+#include "MarksManager.h"
 
 using namespace std;
 
@@ -87,16 +91,20 @@ void Menu::showAdminMenu(mysqlx::Session* session){
             cout << "\nDepartment management is not implemented yet." << endl;
         }
         else if (choice == 4){
-            cout << "\nCourse management is not implemented yet." << endl;
+            CourseManager courseManager(session);
+            courseManager.showCourseManagementMenu();
         }
         else if (choice == 5){
-            cout << "\nSemester offering management is not implemented yet." << endl;
+            SemesterOfferingManager summerOfferingManager(session);
+            summerOfferingManager.showSemesterOfferingMenu();
         }
         else if (choice == 6){
-            cout << "\nEnrollment management is not implemented yet." << endl;
+            EnrollmentManager enrollmentManager(session);
+            enrollmentManager.showEnrollmentManagementMenu();
         }
         else if (choice == 7){
-            cout << "\nMarks management is not implemented yet." << endl;
+            MarksManager marksManager(session);
+            marksManager.showMarksManagementMenu();
         }
         else if (choice == 8){
             cout << "\nReturning to main menu..." << endl;

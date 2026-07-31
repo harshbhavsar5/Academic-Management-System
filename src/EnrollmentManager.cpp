@@ -91,11 +91,13 @@ void EnrollmentManager::addEnrollment(){
 
 void EnrollmentManager::viewAllEnrollments()
 {
-    try{
+    try
+    {
         mysqlx::SqlResult result = session->sql(
             "SELECT e.enrollment_id, s.roll_number, s.full_name, "
             "c.course_code, c.course_name, so.semester_number, "
-            "so.academic_year, e.enrolled_on "
+            "so.academic_year, "
+            "DATE_FORMAT(e.enrolled_on, '%Y-%m-%d') AS enrolled_on "
             "FROM enrollments e "
             "JOIN students s ON e.student_id = s.student_id "
             "JOIN semester_offerings so ON e.offering_id = so.offering_id "
@@ -104,38 +106,55 @@ void EnrollmentManager::viewAllEnrollments()
         ).execute();
 
         cout << "\n===== ENROLLMENT RECORDS =====" << endl;
+
         mysqlx::Row row;
         bool found = false;
 
         while ((row = result.fetchOne()))
         {
             found = true;
+
             cout << "\nEnrollment ID: " << row[0].get<int>() << endl;
-            cout << "Student: " << row[1].get<string>() << " - " << row[2].get<string>() << endl;
-            cout << "Course: " << row[3].get<string>() << " - " << row[4].get<string>() << endl;
+            cout << "Student: "
+                 << row[1].get<string>() << " - "
+                 << row[2].get<string>() << endl;
+
+            cout << "Course: "
+                 << row[3].get<string>() << " - "
+                 << row[4].get<string>() << endl;
+
             cout << "Semester: " << row[5].get<int>() << endl;
             cout << "Academic Year: " << row[6].get<string>() << endl;
             cout << "Enrolled On: " << row[7].get<string>() << endl;
             cout << "----------------------------" << endl;
         }
 
-        if (!found) cout << "No enrollment records found." << endl;
+        if (!found)
+        {
+            cout << "No enrollment records found." << endl;
+        }
     }
-    catch (const mysqlx::Error& error){
-        cout << "\nUnable to read enrollments.\nError: " << error.what() << endl;
+    catch (const mysqlx::Error& error)
+    {
+        cout << "\nUnable to read enrollments." << endl;
+        cout << "Error: " << error.what() << endl;
     }
 }
 
-void EnrollmentManager::searchEnrollment(){
+void EnrollmentManager::searchEnrollment()
+{
     int enrollmentId;
+
     cout << "\nEnter enrollment ID: ";
     cin >> enrollmentId;
 
-    try{
+    try
+    {
         mysqlx::Row row = session->sql(
             "SELECT e.enrollment_id, s.roll_number, s.full_name, "
             "c.course_code, c.course_name, so.semester_number, "
-            "so.academic_year, e.enrolled_on "
+            "so.academic_year, "
+            "DATE_FORMAT(e.enrolled_on, '%Y-%m-%d') AS enrolled_on "
             "FROM enrollments e "
             "JOIN students s ON e.student_id = s.student_id "
             "JOIN semester_offerings so ON e.offering_id = so.offering_id "
@@ -143,21 +162,32 @@ void EnrollmentManager::searchEnrollment(){
             "WHERE e.enrollment_id = ?"
         ).bind(enrollmentId).execute().fetchOne();
 
-        if (!row){
-            cout << "\nNo enrollment found with ID: " << enrollmentId << endl;
+        if (!row)
+        {
+            cout << "\nNo enrollment found with ID: "
+                 << enrollmentId << endl;
             return;
         }
 
         cout << "\n===== ENROLLMENT DETAILS =====" << endl;
         cout << "Enrollment ID: " << row[0].get<int>() << endl;
-        cout << "Student: " << row[1].get<string>() << " - " << row[2].get<string>() << endl;
-        cout << "Course: " << row[3].get<string>() << " - " << row[4].get<string>() << endl;
+
+        cout << "Student: "
+             << row[1].get<string>() << " - "
+             << row[2].get<string>() << endl;
+
+        cout << "Course: "
+             << row[3].get<string>() << " - "
+             << row[4].get<string>() << endl;
+
         cout << "Semester: " << row[5].get<int>() << endl;
         cout << "Academic Year: " << row[6].get<string>() << endl;
         cout << "Enrolled On: " << row[7].get<string>() << endl;
     }
-    catch (const mysqlx::Error& error){
-        cout << "\nUnable to search enrollment.\nError: " << error.what() << endl;
+    catch (const mysqlx::Error& error)
+    {
+        cout << "\nUnable to search enrollment." << endl;
+        cout << "Error: " << error.what() << endl;
     }
 }
 

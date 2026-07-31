@@ -282,7 +282,8 @@ void CourseManager::updateCourseDepartment(const string& courseCode){
     }
 }
 
-void CourseManager::deleteCourse(){
+void CourseManager::deleteCourse()
+{
     string courseCode;
     char confirm;
 
@@ -290,18 +291,27 @@ void CourseManager::deleteCourse(){
     cout << "Enter course code: ";
     cin >> courseCode;
 
-    try{
-        mysqlx::Row row = session->sql(
-            "SELECT course_name FROM courses WHERE course_code = ?"
-        ).bind(courseCode).execute().fetchOne();
+    try
+    {
+        mysqlx::SqlResult searchResult = session->sql(
+            "SELECT course_name "
+            "FROM courses "
+            "WHERE course_code = ?"
+        ).bind(courseCode).execute();
+
+        mysqlx::Row row = searchResult.fetchOne();
 
         if (!row)
         {
-            cout << "\nNo course found with code: " << courseCode << endl;
+            cout << "\nNo course found with code: "
+                 << courseCode << endl;
+
             return;
         }
 
-        cout << "Course Found: " << row[0].get<string>() << endl;
+        cout << "Course Found: "
+             << row[0].get<string>() << endl;
+
         cout << "Delete this course? (Y/N): ";
         cin >> confirm;
 
@@ -311,16 +321,25 @@ void CourseManager::deleteCourse(){
             return;
         }
 
-        mysqlx::SqlResult result = session->sql(
+        mysqlx::SqlResult deleteResult = session->sql(
             "DELETE FROM courses WHERE course_code = ?"
         ).bind(courseCode).execute();
 
-        cout << (result.getAffectedItemsCount() > 0
-            ? "\nCourse deleted successfully."
-            : "\nUnable to delete course.") << endl;
+        if (deleteResult.getAffectedItemsCount() > 0)
+        {
+            cout << "\nCourse deleted successfully." << endl;
+        }
+        else
+        {
+            cout << "\nCourse was not deleted." << endl;
+        }
     }
-    catch (const mysqlx::Error& error){
-        cout << "\nUnable to delete course. It may be used in semester offerings." << endl;
+    catch (const mysqlx::Error& error)
+    {
+        cout << "\nUnable to delete course." << endl;
+        cout << "The course may be used in semester offerings." << endl;
         cout << "Error: " << error.what() << endl;
+
+        return;
     }
 }
