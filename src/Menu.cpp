@@ -12,6 +12,7 @@
 #include "SemesterOfferingManager.h"
 #include "EnrollmentManager.h"
 #include "MarksManager.h"
+#include "ReportManager.h"
 
 using namespace std;
 
@@ -65,7 +66,7 @@ void Menu::showMainMenu(){
 
 void Menu::showAdminMenu(mysqlx::Session* session){
     int choice = 0;
-    while (choice != 8){
+    while (choice != 9){
         cout << "\n========== ADMIN MENU ==========" << endl;
         cout << "1. Manage Students" << endl;
         cout << "2. Manage Faculty" << endl;
@@ -74,7 +75,8 @@ void Menu::showAdminMenu(mysqlx::Session* session){
         cout << "5. Manage Semester Offerings" << endl;
         cout << "6. Manage Enrollments" << endl;
         cout << "7. Manage Marks" << endl;
-        cout << "8. Back to Main Menu" << endl;
+        cout << "8. Reports" << endl;
+        cout << "9. Back to Main Menu" << endl;
 
         cout << "Enter your choice: ";
         cin >> choice;
@@ -107,10 +109,14 @@ void Menu::showAdminMenu(mysqlx::Session* session){
             marksManager.showMarksManagementMenu();
         }
         else if (choice == 8){
+            ReportManager reportManager(session);
+            reportManager.showReportMenu();
+        }
+        else if (choice == 9){
             cout << "\nReturning to main menu..." << endl;
         }
         else{
-            cout << "\nInvalid choice. Enter a number from 1 to 8." << endl;
+            cout << "\nInvalid choice. Enter a number from 1 to 9." << endl;
         }
     }
 }
